@@ -23,23 +23,28 @@ class Ui_Widget
 {
 public:
     QFormLayout *formLayout;
+    QLCDNumber *lcdNumber;
     QSpinBox *spinBox;
     QSlider *horizontalSlider;
-    QLCDNumber *lcdNumber;
 
     void setupUi(QWidget *Widget)
     {
         if (Widget->objectName().isEmpty())
             Widget->setObjectName("Widget");
-        Widget->resize(846, 286);
+        Widget->resize(846, 69);
         formLayout = new QFormLayout(Widget);
         formLayout->setObjectName("formLayout");
+        lcdNumber = new QLCDNumber(Widget);
+        lcdNumber->setObjectName("lcdNumber");
+
+        formLayout->setWidget(1, QFormLayout::ItemRole::FieldRole, lcdNumber);
+
         spinBox = new QSpinBox(Widget);
         spinBox->setObjectName("spinBox");
         spinBox->setMinimum(-100);
         spinBox->setMaximum(100);
 
-        formLayout->setWidget(0, QFormLayout::ItemRole::LabelRole, spinBox);
+        formLayout->setWidget(1, QFormLayout::ItemRole::LabelRole, spinBox);
 
         horizontalSlider = new QSlider(Widget);
         horizontalSlider->setObjectName("horizontalSlider");
@@ -47,12 +52,7 @@ public:
         horizontalSlider->setMaximum(100);
         horizontalSlider->setOrientation(Qt::Orientation::Horizontal);
 
-        formLayout->setWidget(0, QFormLayout::ItemRole::FieldRole, horizontalSlider);
-
-        lcdNumber = new QLCDNumber(Widget);
-        lcdNumber->setObjectName("lcdNumber");
-
-        formLayout->setWidget(1, QFormLayout::ItemRole::SpanningRole, lcdNumber);
+        formLayout->setWidget(0, QFormLayout::ItemRole::SpanningRole, horizontalSlider);
 
 
         retranslateUi(Widget);
