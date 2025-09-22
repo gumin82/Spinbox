@@ -11,6 +11,7 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QLCDNumber>
 #include <QtWidgets/QSlider>
 #include <QtWidgets/QSpinBox>
 #include <QtWidgets/QWidget>
@@ -20,23 +21,35 @@ QT_BEGIN_NAMESPACE
 class Ui_Widget
 {
 public:
-    QSpinBox *spinBox;
     QSlider *horizontalSlider;
+    QSpinBox *spinBox;
+    QLCDNumber *lcdNumber;
 
     void setupUi(QWidget *Widget)
     {
         if (Widget->objectName().isEmpty())
             Widget->setObjectName("Widget");
         Widget->resize(800, 600);
-        spinBox = new QSpinBox(Widget);
-        spinBox->setObjectName("spinBox");
-        spinBox->setGeometry(QRect(120, 230, 42, 22));
         horizontalSlider = new QSlider(Widget);
         horizontalSlider->setObjectName("horizontalSlider");
-        horizontalSlider->setGeometry(QRect(170, 230, 160, 22));
+        horizontalSlider->setGeometry(QRect(340, 341, 271, 21));
+        horizontalSlider->setMinimum(-100);
+        horizontalSlider->setMaximum(100);
         horizontalSlider->setOrientation(Qt::Orientation::Horizontal);
+        spinBox = new QSpinBox(Widget);
+        spinBox->setObjectName("spinBox");
+        spinBox->setGeometry(QRect(140, 340, 158, 21));
+        spinBox->setMinimum(-100);
+        spinBox->setMaximum(100);
+        lcdNumber = new QLCDNumber(Widget);
+        lcdNumber->setObjectName("lcdNumber");
+        lcdNumber->setGeometry(QRect(270, 400, 158, 78));
 
         retranslateUi(Widget);
+        QObject::connect(spinBox, &QSpinBox::valueChanged, horizontalSlider, &QSlider::setValue);
+        QObject::connect(horizontalSlider, &QSlider::valueChanged, spinBox, &QSpinBox::setValue);
+        QObject::connect(horizontalSlider, &QSlider::valueChanged, lcdNumber, qOverload<int>(&QLCDNumber::display));
+        QObject::connect(spinBox, &QSpinBox::valueChanged, lcdNumber, qOverload<int>(&QLCDNumber::display));
 
         QMetaObject::connectSlotsByName(Widget);
     } // setupUi
