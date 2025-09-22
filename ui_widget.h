@@ -11,6 +11,7 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QFormLayout>
 #include <QtWidgets/QLCDNumber>
 #include <QtWidgets/QSlider>
 #include <QtWidgets/QSpinBox>
@@ -21,29 +22,38 @@ QT_BEGIN_NAMESPACE
 class Ui_Widget
 {
 public:
-    QSlider *horizontalSlider;
+    QFormLayout *formLayout;
     QSpinBox *spinBox;
+    QSlider *horizontalSlider;
     QLCDNumber *lcdNumber;
 
     void setupUi(QWidget *Widget)
     {
         if (Widget->objectName().isEmpty())
             Widget->setObjectName("Widget");
-        Widget->resize(800, 600);
+        Widget->resize(846, 286);
+        formLayout = new QFormLayout(Widget);
+        formLayout->setObjectName("formLayout");
+        spinBox = new QSpinBox(Widget);
+        spinBox->setObjectName("spinBox");
+        spinBox->setMinimum(-100);
+        spinBox->setMaximum(100);
+
+        formLayout->setWidget(0, QFormLayout::ItemRole::LabelRole, spinBox);
+
         horizontalSlider = new QSlider(Widget);
         horizontalSlider->setObjectName("horizontalSlider");
-        horizontalSlider->setGeometry(QRect(340, 341, 271, 21));
         horizontalSlider->setMinimum(-100);
         horizontalSlider->setMaximum(100);
         horizontalSlider->setOrientation(Qt::Orientation::Horizontal);
-        spinBox = new QSpinBox(Widget);
-        spinBox->setObjectName("spinBox");
-        spinBox->setGeometry(QRect(140, 340, 158, 21));
-        spinBox->setMinimum(-100);
-        spinBox->setMaximum(100);
+
+        formLayout->setWidget(0, QFormLayout::ItemRole::FieldRole, horizontalSlider);
+
         lcdNumber = new QLCDNumber(Widget);
         lcdNumber->setObjectName("lcdNumber");
-        lcdNumber->setGeometry(QRect(270, 400, 158, 78));
+
+        formLayout->setWidget(1, QFormLayout::ItemRole::SpanningRole, lcdNumber);
+
 
         retranslateUi(Widget);
         QObject::connect(spinBox, &QSpinBox::valueChanged, horizontalSlider, &QSlider::setValue);
